@@ -9,7 +9,7 @@
 #include "delay.h"
 #include "sys.h"
 #include "usart.h"
-
+#include "timer.h"
 
 //任务优先级
 #define START_TASK_PRIO 1
@@ -78,18 +78,32 @@ void start_task(void *pvParameters)
 				(void *)NULL,
 				(UBaseType_t)LED0_TASK_PRIO,
 				(TaskHandle_t *)&LED0Task_Handler);
+	
 	vTaskDelete(StartTask_Handler); //删除开始任务
 	taskEXIT_CRITICAL();			//退出临界区
+		
 }
 
 //LED0任务函数
 void led0_task(void *pvParameters)
 {
+	int temp=750;
+
 	while (1)
 	{ 
 		
-		LED0 = ~LED0;
-		delay_ms(500);
+//		LED0 = ~LED0;
+//		delay_ms(500);
+
+		
+		delay_ms(300);
+		if (300>=temp)
+		{
+			temp=750;
+		}
+		TIM_SetCompare1(TIM3, temp);
+		TIM_SetCompare2(TIM3, temp);		
+		temp--;
 	}
 }
 /***********************************************************************
@@ -109,6 +123,24 @@ static void BSP_Init(void)
 	delay_init();									//延时函数初始化
 	uart_init(115200);								//初始化串口
 	LED_Init();										//初始化LED
-  
+	/*
+	//构建舵机默认频率50Hz
+	//标准50Hz时，占空比范围3%~13%
+	//标准舵机高电平范围0.5ms~2.5ms
+	//此处取limLowMs=0.6ms~limHighMs=2.4ms，留一些余量
+//舵机驱动
+//支持端口：    
+//定时器引脚对应列表
+//通道 CH1  CH2  CH3  CH4
+//TIM1 PA8FT  PA9FT  PA10FT PA11FT
+//TIM2 PA0  PA1  PA2  PA3
+//TIM3 PA6  PA7  PB0  PB1
+//TIM4 PB6FT  PB7FT  PB8FT  PB9FT	
+*/
+	TIM3_PWM_Init(9999,143);	 //144分频。PWM频率=72000000/（10000*144）=50hz
+
+//	TIM_SetCompare1(TIM3, 750);//250为0.5ms，记得要切换成模式1 PB4 左
+//	TIM_SetCompare2(TIM3, 750);//750为1.5ms   1250为2.5ms  300 0.6ms--
+	
 }
 

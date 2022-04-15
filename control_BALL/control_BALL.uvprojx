@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\USER;.\FWlib\inc;.\FWlib\src;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3;.\HARDWARE\LED;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart</IncludePath>
+              <IncludePath>.\CMSIS;.\USER;.\FWlib\inc;.\FWlib\src;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3;.\HARDWARE\LED;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\HARDWARE\TIMER</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -387,6 +387,11 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\HARDWARE\LED\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\TIMER\timer.c</FilePath>
             </File>
           </Files>
         </Group>

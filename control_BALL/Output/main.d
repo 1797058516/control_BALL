@@ -45,3 +45,4 @@
 .\output\main.o: .\SYSTEM\delay\delay.h
 .\output\main.o: .\SYSTEM\usart\usart.h
 .\output\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\output\main.o: .\HARDWARE\TIMER\timer.h
