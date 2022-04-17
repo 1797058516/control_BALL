@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>-1</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\USER;.\FWlib\inc;.\FWlib\src;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3;.\HARDWARE\LED;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\HARDWARE\TIMER</IncludePath>
+              <IncludePath>.\CMSIS;.\USER;.\FWlib\inc;.\FWlib\src;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3;.\HARDWARE\LED;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\HARDWARE\TIMER;.\HARDWARE\OPENMV;.\HARDWARE\USART_BLUE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -392,6 +392,16 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\HARDWARE\TIMER\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>openmv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\OPENMV\openmv.c</FilePath>
+            </File>
+            <File>
+              <FileName>ustart_blue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\USART_BLUE\ustart_blue.c</FilePath>
             </File>
           </Files>
         </Group>
