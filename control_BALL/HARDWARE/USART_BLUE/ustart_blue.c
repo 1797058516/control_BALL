@@ -1,8 +1,11 @@
 # include "ustart_blue.h"
 # include "usart.h"
 #	include "string.h"
+#include "control.h"
 u8 blue[8]={0};
 u8 blue_data[8]={0};
+int num=0;
+int num2=0;
 void uart_init3(u32 bound){
   //GPIO端口设置
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -52,7 +55,7 @@ void USART3_IRQHandler(void) //中断服务函数
 		{
 		Res = USART_ReceiveData(USART3);	//读取接收到的数据
 		recetive_blue_32(Res);
-		
+		//blue_control();
 
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 			{
@@ -112,8 +115,9 @@ void recetive_blue_32(u8 data)//收1个字节数据
 					flag = 0;	
 						
 					memcpy(blue_data,blue,bit_number);
-					printf("data:%d\r\n",blue_data[2]);
+					//printf("data:%d\r\n",blue_data[2]);
 					bit_number =0;
+					blue_control();
 					//PID_realize();
 			
 		}
@@ -130,3 +134,38 @@ void recetive_blue_32(u8 data)//收1个字节数据
 		bit_number=0;
 	} 	
 }
+
+
+
+void blue_control()
+{
+	if(blue_data[1]==1)
+	{
+		SetPwm(0, 0);
+	}
+	else if(blue_data[2]==1)
+	{
+		num =num+10;
+		SetPwm(0, num);
+		blue_data[2]=0;
+	}	
+	else if(blue_data[3]==1)
+	{
+		num =num-10;
+		SetPwm(0, num);
+		blue_data[3]=0;
+	}	
+	else if(blue_data[4]==1)
+	{
+		num2 =num2-10;
+		SetPwm(num2, 0);
+		blue_data[4]=0;
+	}		
+	else if(blue_data[5]==1)
+	{
+		num2 =num2+10;
+		SetPwm(num2, 0);
+		blue_data[5]=0;
+	}			
+}
+

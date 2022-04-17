@@ -12,7 +12,8 @@
 #include "timer.h"
 #include "openmv.h"
 #include "ustart_blue.h"
-
+//#include "control.h"
+#include "ustart_blue.h"
 extern u8 Openmv_x;
 extern u8 Openmv_y;
 extern u8 blue_data[];
@@ -31,12 +32,22 @@ void led0_task(void *pvParameters);
 
 int main(void)
 {	
+ int temp=750;	
 	BSP_Init();
 
   while(1)
 	{
 	delay_ms(2000);
-	//USART_SendData( USART3,0x30);		
+	if(blue_data[2]==1)
+	{
+		//num += 100;
+		printf("data:%d\r\n",blue_data[2]);
+		TIM_SetCompare1(TIM3,900);
+		//delays_ms();
+		//SetPwm(num, 0);
+		blue_data[2]=0;
+	}	
+	//USART_SendData( USART3,0x30);	
 	}
 }
 
@@ -80,7 +91,7 @@ static void BSP_Init(void)
 	 * 优先级分组只需要分组一次即可，以后如果有其他的任务需要用到中断，
 	 * 都统一用这个优先级分组，千万不要再分组，切忌。
 	 */
-	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
 	delay_init();									//延时函数初始化
 	uart_init(115200);								//初始化串口
 	uart_init3(115200);						//蓝牙
@@ -101,8 +112,8 @@ static void BSP_Init(void)
 */
 	TIM3_PWM_Init(9999,143);	 //144分频。PWM频率=72000000/（10000*144）=50hz
 
-//	TIM_SetCompare1(TIM3, 750);//250为0.5ms，记得要切换成模式1 PB4 左
-//	TIM_SetCompare2(TIM3, 750);//750为1.5ms   1250为2.5ms  300 0.6ms--
+	TIM_SetCompare1(TIM3, 750);//250为0.5ms，记得要切换成模式1 PB4 左
+	TIM_SetCompare2(TIM3, 750);//750为1.5ms   1250为2.5ms  300 0.6ms--
 	
 }
 

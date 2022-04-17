@@ -33,3 +33,4 @@
 .\output\ustart_blue.o: .\SYSTEM\usart\usart.h
 .\output\ustart_blue.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 .\output\ustart_blue.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
+.\output\ustart_blue.o: .\USER\control.h
