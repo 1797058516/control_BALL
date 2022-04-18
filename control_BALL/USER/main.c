@@ -14,10 +14,12 @@
 #include "ustart_blue.h"
 //#include "control.h"
 #include "ustart_blue.h"
-extern u8 Openmv_x;
-extern u8 Openmv_y;
-extern u8 blue_data[];
+#include "pid.h"
 
+extern u16 Openmv_x;
+extern u16 Openmv_y;
+extern u8 blue_data[];
+extern PIDTypedef PID_Struct;
 /*
 *************************************************************************
 *                             函数声明
@@ -28,56 +30,23 @@ static void BSP_Init(void);/* 用于初始化板载相关资源 */
 //任务函数
 void start_task(void *pvParameters);
 void led0_task(void *pvParameters);
-
+//PIDTypedef *PID_struct;
 
 int main(void)
 {	
- int temp=750;	
-	BSP_Init();
 
+	BSP_Init();
+	PID_Init();
+//	PID_Init(PID_struct);
   while(1)
 	{
 	delay_ms(2000);
-	if(blue_data[2]==1)
-	{
-		//num += 100;
-		printf("data:%d\r\n",blue_data[2]);
-		TIM_SetCompare1(TIM3,900);
-		//delays_ms();
-		//SetPwm(num, 0);
-		blue_data[2]=0;
-	}	
-	//USART_SendData( USART3,0x30);	
+	//printf("Openmv_x:%d\r\n",Openmv_x);
+
 	}
 }
 
 
-
-
-//LED0任务函数
-void led0_task(void *pvParameters)
-{
-	int temp=750;
-	//USART_SendData( USART3,0x30);
-	while (1)
-	{ 
-		
-//		LED0 = ~LED0;
-//		delay_ms(500);
-
-		//printf("Openmv_x:%d,Openmv_y:%d \r\n",blue_data[0],blue_data[1]);
-		
-		delay_ms(3000);
-		if (300>=temp)
-		{
-			temp=750;
-			
-		}
-		TIM_SetCompare1(TIM3, temp);
-		TIM_SetCompare2(TIM3, temp);		
-		temp--;
-	}
-}
 /***********************************************************************
   * @ 函数名  ： BSP_Init
   * @ 功能说明： 板级外设初始化，所有板子上的初始化均可放在这个函数里面
@@ -94,6 +63,7 @@ static void BSP_Init(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
 	delay_init();									//延时函数初始化
 	uart_init(115200);								//初始化串口
+	uart_init2(115200);						//openmv
 	uart_init3(115200);						//蓝牙
 	LED_Init();										//初始化LED
 	/*

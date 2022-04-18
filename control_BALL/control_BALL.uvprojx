@@ -433,6 +433,11 @@
               <FileType>1</FileType>
               <FilePath>.\USER\control.c</FilePath>
             </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\pid.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

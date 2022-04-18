@@ -32,3 +32,4 @@
 .\output\openmv.o: .\FWlib\inc\misc.h
 .\output\openmv.o: .\SYSTEM\usart\usart.h
 .\output\openmv.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\output\openmv.o: .\USER\pid.h

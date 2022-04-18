@@ -1,8 +1,9 @@
 #include "openmv.h"
 #include "usart.h"	
-
-u16 Openmv[4];
-u8 Openmv_x = 0, Openmv_y = 0;
+#include "pid.h"
+u16 Openmv[5];
+u16 Openmv_x = 0, Openmv_y = 0;
+extern PIDTypedef PID_Struct;
 
 void uart_init2(u32 bound){
   //GPIO端口设置
@@ -26,7 +27,7 @@ void uart_init2(u32 bound){
 
   //Usart1 NVIC 配置
   NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 1;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 0;//抢占优先级3
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
@@ -52,9 +53,9 @@ void USART2_IRQHandler(void) //中断服务函数
 #if SYSTEM_SUPPORT_OS 		//如果SYSTEM_SUPPORT_OS为真，则需要支持OS.
 	OSIntEnter();    
 #endif
-	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
-		Res = USART_ReceiveData(USART3);	//读取接收到的数据
+		Res = USART_ReceiveData(USART2);	//读取接收到的数据
 		Openmv_Receive_Data(Res);
 		//USART_SendData(USART3, Res); 
 			
@@ -84,11 +85,51 @@ void USART2_IRQHandler(void) //中断服务函数
 } 
 
 
-void Openmv_Receive_Data(u16 date)
+void Openmv_Receive_Data(u16 data)
 {
-	static u8 flag = 0;
-	
-	
+	static u8 state = 0;	
+	static u8 bit_number=0;		
+	if(state==0&&data==0xFF)	//第一位校验位0xAD
+	{
+		state=1;
+		Openmv[bit_number++]=data;
+	}
+	else if(state==1&&data==0xFE)		//第二位校验位18
+	{
+		state=2;
+		Openmv[bit_number++]=data;
+	}
+	else if(state==2)		
+	{
+		Openmv[bit_number++]=data;
+		if(bit_number>=4)
+		{
+			state=3;
+		}
+	}
+	else if(state==3)		//检测是否接受到结束标志
+	{
+		if(data == 0x5B)	//最后一位终止位0x5B
+		{
+					state = 0;
+					bit_number=0;	
+					//Openmv[bit_number++]=data;					
+					PID_realize();
+					
+		}
+		else if(data != 0x5B)
+		{
+				 state = 0;
+				 bit_number=0;						
+		}
+	}    
+	else
+	{
+		state = 0;
+		bit_number=0;
+	}
+
+	/*
 	if((flag == 0) && (date == 0xFF))
 	{
 		flag = 1;
@@ -109,7 +150,11 @@ void Openmv_Receive_Data(u16 date)
 			flag = 0;
 			Openmv[3] = date;
 			Openmv_Date();
-	}	
+			//printf(" PID_Struct;%d",PID_Struct.Set_X);
+			//printf(" Openmv_x;%d",Openmv_x);
+			PID_realize();
+	}
+	else if()
 	else
 	{
 		int j;
@@ -118,8 +163,9 @@ void Openmv_Receive_Data(u16 date)
 		{
 			Openmv[j] = 0;
 		}
+		
 	}
-	
+*/	
 }
 
 void Openmv_Date(void)

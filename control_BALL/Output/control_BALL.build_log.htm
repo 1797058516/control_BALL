@@ -28,7 +28,14 @@ Project File Date:  04/17/2022
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil\ARM\ARMCC\Bin'
 Build target 'Project'
 Note: source file '.\CMSIS\startup\startup_stm32f10x_md.s' - object file renamed from '.\Output\startup_stm32f10x_md.o' to '.\Output\startup_stm32f10x_md_1.o'.
-".\Output\control_BALL.axf" - 0 Error(s), 0 Warning(s).
+compiling pid.c...
+USER\pid.h(27): warning:  #1295-D: Deprecated declaration PID_Init - give arg types
+  void PID_Init();
+USER\pid.c: 1 warning, 0 errors
+linking...
+Program Size: Code=6316 RO-data=268 RW-data=156 ZI-data=2028  
+FromELF: creating hex file...
+".\Output\control_BALL.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -41,7 +48,7 @@ Package Vendor: Keil
   D:\keil\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

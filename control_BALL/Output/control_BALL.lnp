@@ -7,6 +7,7 @@
 ".\output\stm32f10x_it.o"
 ".\output\startup_stm32f10x_md_1.o"
 ".\output\control.o"
+".\output\pid.o"
 ".\output\delay.o"
 ".\output\usart.o"
 ".\output\sys.o"
