@@ -40,9 +40,9 @@ int main(void)
 //	PID_Init(PID_struct);
   while(1)
 	{
-	delay_ms(2000);
-	//printf("Openmv_x:%d\r\n",Openmv_x);
-
+	//delay_ms(2);
+	//printf("Openmv_x:%d,Openmv_y:%d\r\n",Openmv_x,Openmv_y);
+		//PID_realize();
 	}
 }
 
@@ -82,8 +82,8 @@ static void BSP_Init(void)
 */
 	TIM3_PWM_Init(9999,143);	 //144分频。PWM频率=72000000/（10000*144）=50hz
 
-	TIM_SetCompare1(TIM3, 750);//250为0.5ms，记得要切换成模式1 PB4 左
-	TIM_SetCompare2(TIM3, 750);//750为1.5ms   1250为2.5ms  300 0.6ms--
+	TIM_SetCompare1(TIM3, 770);//250为0.5ms，记得要切换成模式1 PB4 左
+	TIM_SetCompare2(TIM3, 770);//750为1.5ms   1250为2.5ms  300 0.6ms--
 	
 }
 

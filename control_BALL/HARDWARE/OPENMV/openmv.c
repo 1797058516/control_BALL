@@ -3,6 +3,7 @@
 #include "pid.h"
 u16 Openmv[5];
 u16 Openmv_x = 0, Openmv_y = 0;
+
 extern PIDTypedef PID_Struct;
 
 void uart_init2(u32 bound){
@@ -113,6 +114,8 @@ void Openmv_Receive_Data(u16 data)
 		{
 					state = 0;
 					bit_number=0;	
+					Openmv_x=Openmv[2];
+					Openmv_y=Openmv[3];
 					//Openmv[bit_number++]=data;					
 					PID_realize();
 					

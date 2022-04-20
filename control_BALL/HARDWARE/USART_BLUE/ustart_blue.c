@@ -2,10 +2,12 @@
 # include "usart.h"
 #	include "string.h"
 #include "control.h"
+#include "pid.h"
 u8 blue[8]={0};
 u8 blue_data[8]={0};
 int num=0;
 int num2=0;
+extern PIDTypedef PID_Struct;
 void uart_init3(u32 bound){
   //GPIO∂Àø⁄…Ë÷√
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -141,12 +143,16 @@ void blue_control()
 {
 	if(blue_data[1]==1)
 	{
-		SetPwm(0, 0);
+		//SetPwm(0, 0);
+		PID_Struct.Set_X=80;
+		PID_Struct.Set_Y=60;		
 	}
 	else if(blue_data[2]==1)
 	{
-		num =num+10;
-		SetPwm(0, num);
+//		num =num+10;
+//		SetPwm(0, num);
+		PID_Struct.Set_X=20;
+		PID_Struct.Set_Y=60;
 		blue_data[2]=0;
 	}	
 	else if(blue_data[3]==1)
