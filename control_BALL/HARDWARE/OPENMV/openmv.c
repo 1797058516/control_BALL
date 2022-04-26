@@ -1,6 +1,6 @@
 #include "openmv.h"
 #include "usart.h"	
-#include "pid.h"
+#include "control.h"
 u16 Openmv[5];
 u16 Openmv_x = 0, Openmv_y = 0;
 

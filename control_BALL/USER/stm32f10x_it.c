@@ -23,7 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-
+#include "led.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -39,10 +39,22 @@
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
 
+//定时器4中断服务程序
+//void TIM4_IRQHandler(void)   //TIM4中断
+//{
+//	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET)  //检查TIM4更新中断发生与否
+//		{
+//		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx更新中断标志 
+//		LED0=!LED0;
+//		
+//		}
+//}
+
 /**
   * @brief  This function handles NMI exception.
   * @param  None
-  * @retval None
+  * 
+	@retval None
   */
 void NMI_Handler(void)
 {
@@ -135,6 +147,9 @@ void DebugMon_Handler(void)
 void SysTick_Handler(void)
 {
 }
+
+
+
 
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */

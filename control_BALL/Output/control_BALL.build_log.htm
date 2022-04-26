@@ -28,14 +28,20 @@ Project File Date:  04/17/2022
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil\ARM\ARMCC\Bin'
 Build target 'Project'
 Note: source file '.\CMSIS\startup\startup_stm32f10x_md.s' - object file renamed from '.\Output\startup_stm32f10x_md.o' to '.\Output\startup_stm32f10x_md_1.o'.
-compiling pid.c...
-USER\pid.h(34): warning:  #1295-D: Deprecated declaration PID_Init - give arg types
+compiling main.c...
+.\HARDWARE\USART_BLUE\ustart_blue.h(8): warning:  #1295-D: Deprecated declaration blue_control - give arg types
+  void blue_control();
+.\HARDWARE\USART_BLUE\ustart_blue.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif
+USER\control.h(35): warning:  #1295-D: Deprecated declaration PID_Init - give arg types
   void PID_Init();
-USER\pid.c: 1 warning, 0 errors
+USER\main.c(37): warning:  #177-D: variable "temp"  was declared but never referenced
+  	int temp=750;
+USER\main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=6884 RO-data=268 RW-data=168 ZI-data=2048  
+Program Size: Code=6428 RO-data=268 RW-data=168 ZI-data=2048  
 FromELF: creating hex file...
-".\Output\control_BALL.axf" - 0 Error(s), 1 Warning(s).
+".\Output\control_BALL.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 

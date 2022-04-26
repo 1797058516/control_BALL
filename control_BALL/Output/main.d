@@ -36,4 +36,4 @@
 .\output\main.o: .\HARDWARE\TIMER\timer.h
 .\output\main.o: .\HARDWARE\OPENMV\openmv.h
 .\output\main.o: .\HARDWARE\USART_BLUE\ustart_blue.h
-.\output\main.o: USER\pid.h
+.\output\main.o: USER\control.h

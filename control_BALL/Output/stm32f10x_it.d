@@ -29,3 +29,5 @@
 .\output\stm32f10x_it.o: .\FWlib\inc\stm32f10x_usart.h
 .\output\stm32f10x_it.o: .\FWlib\inc\stm32f10x_wwdg.h
 .\output\stm32f10x_it.o: .\FWlib\inc\misc.h
+.\output\stm32f10x_it.o: .\HARDWARE\LED\led.h
+.\output\stm32f10x_it.o: .\SYSTEM\sys\sys.h

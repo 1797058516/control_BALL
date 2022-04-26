@@ -2,7 +2,8 @@
 # include "usart.h"
 #	include "string.h"
 #include "control.h"
-#include "pid.h"
+//#include "pid.h"
+
 u8 blue[8]={0};
 u8 blue_data[8]={0};
 int num=0;

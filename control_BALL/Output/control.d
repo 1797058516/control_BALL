@@ -30,3 +30,7 @@
 .\output\control.o: .\FWlib\inc\stm32f10x_usart.h
 .\output\control.o: .\FWlib\inc\stm32f10x_wwdg.h
 .\output\control.o: .\FWlib\inc\misc.h
+.\output\control.o: .\SYSTEM\usart\usart.h
+.\output\control.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\output\control.o: .\HARDWARE\OPENMV\openmv.h
+.\output\control.o: D:\keil\ARM\ARMCC\Bin\..\include\math.h

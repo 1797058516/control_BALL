@@ -12,9 +12,9 @@
 #include "timer.h"
 #include "openmv.h"
 #include "ustart_blue.h"
-//#include "control.h"
+#include "control.h"
 #include "ustart_blue.h"
-#include "pid.h"
+//#include "pid.h"
 
 extern u16 Openmv_x;
 extern u16 Openmv_y;
@@ -34,15 +34,29 @@ void led0_task(void *pvParameters);
 
 int main(void)
 {	
-
+	int temp=750;
 	BSP_Init();
 	PID_Init();
 //	PID_Init(PID_struct);
+
   while(1)
 	{
 	//delay_ms(2);
 	//printf("Openmv_x:%d,Openmv_y:%d\r\n",Openmv_x,Openmv_y);
 		//PID_realize();
+		
+//		TIM_SetCompare1(TIM3, 1000);
+//		delay_ms(1000);
+//		TIM_SetCompare1(TIM3, 750);
+		delay_ms(500);
+//		LED0=!LED0;
+		
+//		temp++;
+//		if (temp>=1150)
+//		{temp=750;}
+//		TIM_SetCompare1(TIM3, temp);
+		//delay_ms(1000);
+		//TIM_SetCompare1(TIM3, 1100);	
 	}
 }
 
@@ -80,8 +94,8 @@ static void BSP_Init(void)
 //TIM3 PA6  PA7  PB0  PB1
 //TIM4 PB6FT  PB7FT  PB8FT  PB9FT	
 */
-	TIM3_PWM_Init(9999,143);	 //144分频。PWM频率=72000000/（10000*144）=50hz
-
+	//TIM3_PWM_Init(9999,143);	 //144分频。PWM频率=72000000/（10000*144）=50hz
+	TIM4_Int_Init(4999,7199);    //10Khz的计数频率，计数到5000为500ms  
 	TIM_SetCompare1(TIM3, 770);//250为0.5ms，记得要切换成模式1 PB4 左
 	TIM_SetCompare2(TIM3, 770);//750为1.5ms   1250为2.5ms  300 0.6ms--
 	
