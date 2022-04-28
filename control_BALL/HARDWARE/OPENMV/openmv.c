@@ -2,7 +2,7 @@
 #include "usart.h"	
 #include "control.h"
 u16 Openmv[5];
-u16 Openmv_x = 0, Openmv_y = 0;
+u16 Openmv_x = 253, Openmv_y = 253;
 
 extern PIDTypedef PID_Struct;
 
@@ -59,8 +59,7 @@ void USART2_IRQHandler(void) //中断服务函数
 		Res = USART_ReceiveData(USART2);	//读取接收到的数据
 		Openmv_Receive_Data(Res);
 		//USART_SendData(USART3, Res); 
-			
-			
+				
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 			{
 			if(USART_RX_STA&0x4000)//接收到了0x0d
@@ -117,7 +116,7 @@ void Openmv_Receive_Data(u16 data)
 					Openmv_x=Openmv[2];
 					Openmv_y=Openmv[3];
 					//Openmv[bit_number++]=data;					
-					PID_realize();
+					//PID_realize();
 					
 		}
 		else if(data != 0x5B)

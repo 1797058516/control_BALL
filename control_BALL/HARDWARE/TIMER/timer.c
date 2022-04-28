@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "led.h"
 #include "usart.h"
+#include "control.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTE精英STM32开发板
@@ -142,7 +143,7 @@ void TIM4_IRQHandler(void)   //TIM4中断
 		{
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx更新中断标志 
 		//LED0=!LED0;
-		
+		PID_realize();
 		}
 }
 

@@ -33,3 +33,4 @@
 .\output\timer.o: .\HARDWARE\LED\led.h
 .\output\timer.o: .\SYSTEM\usart\usart.h
 .\output\timer.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\output\timer.o: .\USER\control.h

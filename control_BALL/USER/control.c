@@ -25,6 +25,8 @@ void Limit_PWM(int x,int y)
 
 
 PIDTypedef PID_Struct;
+PIDTypedef PID_V;//速度环
+
 extern u16 Openmv_x,Openmv_y;
 extern u16 Openmv[];
 
@@ -58,13 +60,18 @@ void PID_Init(void)
 //	PID_Struct.Kd = 20;
 //	PID_Struct.Ki = 0;
 //YYY	
-	PID_Struct.Kp_y = 2.9;
-	PID_Struct.Kd_y = 23;//22
-	PID_Struct.Ki_y = 0.003;	//0.027
-	
-	PID_Struct.Kp_x = 1.5;//1.6 2  2,2          
-	PID_Struct.Kd_x = 0;//20 18  12  28
-	PID_Struct.Ki_x = 0.008;	//0.036   0.03
+
+	PID_Struct.Kp_y = 2.15;
+	PID_Struct.Kd_y = 1.4;//22
+	PID_Struct.Ki_y = 0.02;	//0.027
+	//位置环
+	PID_Struct.Kp_x = 2.15;//  1.95 2.2 
+	PID_Struct.Kd_x = 1.4;//  1.1 1.4
+	PID_Struct.Ki_x = 0.2;	//0.5 0.2
+	//速度环
+	PID_V.Kp_x=1.5;
+	PID_V.Kd_x=0.0;
+	PID_V.Ki_x=0.0;	
 	//pid 2.2 29 0,03 
 	PID_Struct.X_Ek	= 0;
 	PID_Struct.X_Ek_pre = 0;
@@ -72,8 +79,8 @@ void PID_Init(void)
 	PID_Struct.Y_Ek = 0;
 	PID_Struct.Y_Ek_pre = 0;
 	PID_Struct.Y_EkD=0;		
-	PID_Struct.PWM_X_Middle=770;
-	PID_Struct.PWM_Y_Middle=770;
+	PID_Struct.PWM_X_Middle=750;
+	PID_Struct.PWM_Y_Middle=750;
 	PID_Struct.PWM_X = PID_Struct.PWM_X_Middle;
 	PID_Struct.PWM_Y = PID_Struct.PWM_Y_Middle;
 }
@@ -83,8 +90,10 @@ void PID_realize(void)
 {
 	static float Sum_x,Sum_y;
 	static u16 count=0;
-  //float X_ek;
-	if(Openmv[2]==253 && Openmv[3]==253) 
+//	static int speed_x=0,speed_y;
+//	static u16 last_x;
+
+	if(Openmv_x==253 && Openmv_y==253) //	if(Openmv[2]==253 && Openmv[3]==253) 
 	{	
 		PID_Struct.PWM_X = PID_Struct.PWM_X_Middle;
 		PID_Struct.PWM_Y = PID_Struct.PWM_Y_Middle;	
@@ -92,37 +101,42 @@ void PID_realize(void)
 	
 	else
 	{	
-
+//位置环
 		PID_Struct.X_Ek = PID_Struct.Set_X-Openmv[2];	//小球x坐标
 		PID_Struct.Y_Ek = Openmv[3]-PID_Struct.Set_Y;	//小球y坐标
+//速度环
+//		if(count>2)		speed_x=(Openmv[2]-last_x)/0.1;
 
-		//X_ek=PID_Struct.X_Ek;
-		//PID_Struct.X_EkD=X_ek-PID_Struct.X_Ek_pre;//PID of D;
-		//PID_Struct.Y_EkD=PID_Struct.Y_Ek-PID_Struct.Y_Ek_pre;	
+//		last_x=Openmv[2];
+
+//		PID_V.X_Ek=0-speed_x;
 		
-	
-		//Sum=(PID_Struct.X_Ek_pre+PID_Struct.X_Ek)/2;		
+		//printf("speed_x:%d\r\n",speed_x);
 		Sum_x=Sum_x+(PID_Struct.X_Ek_pre+PID_Struct.X_Ek)/2;
 	  Sum_y=Sum_y+(PID_Struct.Y_Ek_pre+PID_Struct.Y_Ek)/2;
 		//printf("Openmvx:%d\r\n",Openmv[2]);
 		//PID_Struct.PWM_X = PID_Struct.Kp*PID_Struct.X_Ek +PID_Struct.Kd*(PID_Struct.X_Ek-PID_Struct.X_Ek_pre) + PID_Struct.PWM_X_Middle+PID_Struct.Ki*Sum;
-		PID_Struct.PWM_Y = PID_Struct.Kp_y*PID_Struct.Y_Ek +PID_Struct.Kd_y*(PID_Struct.Y_Ek-PID_Struct.Y_Ek_pre) + PID_Struct.PWM_Y_Middle+PID_Struct.Ki_y*Sum_y;
-		//PID_Struct.PWM_Y = PID_Struct.Kp*PID_Struct.Y_Ek +PID_Struct.Kd*((PID_Struct.Y_Ek-PID_Struct.Y_Ek1)/时间) + PID_Struct.PWM_Y_Middle;
-		PID_Struct.PWM_X = PID_Struct.Kp_x*PID_Struct.X_Ek +PID_Struct.Kd_x*(PID_Struct.X_Ek-PID_Struct.X_Ek_pre) + PID_Struct.PWM_X_Middle+PID_Struct.Ki_x*Sum_x;		
+		PID_Struct.PWM_Y = PID_Struct.Kp_y*PID_Struct.Y_Ek +PID_Struct.Kd_y*(PID_Struct.Y_Ek-PID_Struct.Y_Ek_pre)*10 + PID_Struct.PWM_Y_Middle+PID_Struct.Ki_y*Sum_y*0.1;
+		PID_Struct.PWM_X = PID_Struct.Kp_x*PID_Struct.X_Ek +PID_Struct.Kd_x*(PID_Struct.X_Ek-PID_Struct.X_Ek_pre)*10 + PID_Struct.PWM_X_Middle+PID_Struct.Ki_x*Sum_x*0.1;		
 		
+		//PID_V.PWM_X = PID_V.Kp_x*PID_Struct.X_Ek +PID_V.Kd_x*(PID_V.X_Ek-PID_V.X_Ek_pre)+PID_Struct.PWM_X_Middle;		
+		//位置环
 		PID_Struct.X_Ek_pre = PID_Struct.X_Ek;
 		PID_Struct.Y_Ek_pre = PID_Struct.Y_Ek;
+		//速度环
+		//PID_V.X_Ek_pre=PID_V.X_Ek;
+		
 		//printf("PWM_X:%d\r\n",PID_Struct.PWM_X);
-		//printf("Sum:%f\r\n",Sum);		
+	//	printf("Sum:%f\r\n",PID_Struct.Ki_x*Sum_x*0.1);		
 //		printf("PID_Struct.X_Ek:%f\r\n",PID_Struct.X_Ek);				
 		//printf("PID_Struct.X_EkD:%f\r\n",PID_Struct.X_EkD*PID_Struct.Kd);			
 //		printf("PID_Struct.X_Ek_pre:%f\r\n",PID_Struct.X_Ek_pre);		
 	count++;
-	if(count>=1000||Sum_x>3000||Sum_y>3000)//对i进行发清零1200  2000
+	if(count>=1000||Sum_x>25000||Sum_y>25000)//对i进行发清零1200  2000
 	{
-		printf("count=%d",count);
+		printf("count=%d\r\n",count);
 		count=0;
-		if(Sum_x>2500)		Sum_x=Sum_x/2;
+		if(Sum_x>2500)		Sum_x=0;
 		if(Sum_y>2500)		Sum_y=Sum_y/2;
 
 	}		
@@ -139,7 +153,10 @@ void PID_realize(void)
 	}
 	
 		TIM_SetCompare1(TIM3,PID_Struct.PWM_X);	 //更新PWM参数，改变输出占空比
-		//TIM_SetCompare2(TIM3,PID_Struct.PWM_Y);
+		//TIM_SetCompare1(TIM3,PID_V.PWM_X);	 //更新PWM参数，改变输出占空比
+
+		//printf("PID_Struct.PWM_X:%d\r\n",PID_Struct.PWM_X);
+		TIM_SetCompare2(TIM3,PID_Struct.PWM_Y);
 	
 
 }

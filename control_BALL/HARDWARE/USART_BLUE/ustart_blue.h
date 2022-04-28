@@ -6,5 +6,5 @@
 void uart_init3(u32 bound);
 void recetive_blue_32(u8 data);//收1个字节数据
 void blue_control();
-extern u8 blue_data[8];
+extern u8 blue_data[13];
 #endif

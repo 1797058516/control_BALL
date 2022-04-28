@@ -4,8 +4,8 @@
 #include "control.h"
 //#include "pid.h"
 
-u8 blue[8]={0};
-u8 blue_data[8]={0};
+u8 blue[13]={0};//8
+u8 blue_data[13]={0};
 int num=0;
 int num2=0;
 extern PIDTypedef PID_Struct;
@@ -30,7 +30,7 @@ void uart_init3(u32 bound){
 
   //Usart1 NVIC 配置
   NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1 ;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0 ;//抢占优先级3
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
@@ -59,7 +59,7 @@ void USART3_IRQHandler(void) //中断服务函数
 		Res = USART_ReceiveData(USART3);	//读取接收到的数据
 		recetive_blue_32(Res);
 		//blue_control();
-
+	  //printf("data:\r\n");
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 			{
 			if(USART_RX_STA&0x4000)//接收到了0x0d
@@ -96,9 +96,9 @@ void recetive_blue_32(u8 data)//收1个字节数据
 	else if(flag==1)		
 	{
 		blue[bit_number++]=data;
-		if(bit_number>=6)
+		if(bit_number>=11)//6
 		{
-			//printf("data:%d\r\n",bit_number);
+			
 			flag=2;
 		}		
 	}
@@ -111,20 +111,20 @@ void recetive_blue_32(u8 data)//收1个字节数据
 		//printf("data:%d\r\n",blue[5]);
 		b=l;			
 	}	
-	else if((flag==3)&&(b==blue[6]))		//检测是否接受到结束标志
+	else if((flag==3)&&(b==blue[11]))		//检测是否接受到结束标志  6
 	{
 		if(data == 0x5A)	//最后一位终止位0x5B
 		{		
 					flag = 0;	
 						
 					memcpy(blue_data,blue,bit_number);
-					//printf("data:%d\r\n",blue_data[2]);
+					//printf("data:%d\r\n",blue[2]);
 					bit_number =0;
 					blue_control();
 					//PID_realize();
 			
 		}
-		else if(blue[7] != 0x5A)
+		else if(blue[12] != 0x5A)//7
 		{
 				 memset( blue,0x00,bit_number);
 				 flag = 0;
@@ -145,34 +145,60 @@ void blue_control()
 	if(blue_data[1]==1)
 	{
 		//SetPwm(0, 0);
-		PID_Struct.Set_X=80;
-		PID_Struct.Set_Y=60;		
+		PID_Struct.Set_X=35;
+		PID_Struct.Set_Y=20;		
 	}
 	else if(blue_data[2]==1)
 	{
 //		num =num+10;
 //		SetPwm(0, num);
-		PID_Struct.Set_X=20;
-		PID_Struct.Set_Y=60;
+		PID_Struct.Set_X=80;
+		PID_Struct.Set_Y=20;
 		blue_data[2]=0;
 	}	
 	else if(blue_data[3]==1)
 	{
-		num =num-10;
-		SetPwm(0, num);
+		PID_Struct.Set_X=125;
+		PID_Struct.Set_Y=20;
 		blue_data[3]=0;
+		//printf("data:\r\n");
+
 	}	
 	else if(blue_data[4]==1)
 	{
-		num2 =num2-10;
-		SetPwm(num2, 0);
+		PID_Struct.Set_X=35;
+		PID_Struct.Set_Y=60;
 		blue_data[4]=0;
 	}		
 	else if(blue_data[5]==1)
 	{
-		num2 =num2+10;
-		SetPwm(num2, 0);
+		PID_Struct.Set_X=80;
+		PID_Struct.Set_Y=60;
 		blue_data[5]=0;
+	}			
+	else if(blue_data[6]==1)
+	{
+		PID_Struct.Set_X=125;
+		PID_Struct.Set_Y=60;
+		blue_data[6]=0;
+	}	
+	else if(blue_data[7]==1)
+	{
+		PID_Struct.Set_X=35;
+		PID_Struct.Set_Y=100;
+		blue_data[7]=0;
+	}		
+	else if(blue_data[8]==1)
+	{
+		PID_Struct.Set_X=80;
+		PID_Struct.Set_Y=100;
+		blue_data[8]=0;
+	}			
+	else if(blue_data[9]==1)
+	{
+		PID_Struct.Set_X=125;
+		PID_Struct.Set_Y=100;
+		blue_data[9]=0;
 	}			
 }
 
